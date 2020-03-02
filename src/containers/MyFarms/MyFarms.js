@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Farms from '../../components/Farms/Farms';
+import Farm from '../../components/Farm/Farm';
 
 const farms = [
     {
@@ -19,6 +19,10 @@ const farms = [
             {
                 name: 'Kurnik 3',
                 id: 'dfas22faba'
+            },
+            {
+                name: 'Kurnik 4',
+                id: 'dfaees22faba'
             },
         ]
     },
@@ -49,9 +53,13 @@ class MyFarms extends Component {
     }
 
     render() {
+
+        const allFarms = this.state.fetchedFarms.map(farm =>
+            <Farm key={farm.id} farmProps={farm} />);
+
         return (
-            <div>
-                <Farms farms={this.state.fetchedFarms} />
+            <div className='grid'>
+                {allFarms}
             </div>
         );
     }
