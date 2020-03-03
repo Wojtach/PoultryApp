@@ -1,10 +1,11 @@
 import React from 'react';
 
 import classes from './Farm.module.css';
+import Button from '../UI/Button/Button';
 
-const farm = ({ farmProps }) => {
+const farm = (props) => {
 
-    const halls = farmProps.halls.map(hall => (
+    const halls = props.farmDetails.halls.map(hall => (
         <li className={classes.Hall} key={hall.id}>
             <a href="">
                 {hall.name}
@@ -13,16 +14,16 @@ const farm = ({ farmProps }) => {
     ))
 
     return (
-        <div className={classes.FarmContent}>
-            <h2>{farmProps.name}</h2>
+        <section className={classes.FarmContent}>
+            <header className={classes.FarmHeader}>{props.farmDetails.name}</header>
             <ul className={classes.Halls}>
                 {halls}
             </ul>
             <div className={classes.Buttons}>
-                <button>Add</button>
-                <button>Delete</button>
+                <Button btnType='Normal' clicked={props.detailsFarm} >szczegóły</Button>
+                <Button btnType='Danger' clicked={props.deleteFarm}>usuń</Button>
             </div>
-        </div>
+        </section>
     )
 }
 

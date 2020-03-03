@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import Farm from '../../components/Farm/Farm';
+import Modal from '../../components/UI/Modal/Modal';
+import ConfirmAction from '../../components/ConfirmAction/ConfirmAction';
 
 const farms = [
     {
@@ -50,17 +52,67 @@ const farms = [
 class MyFarms extends Component {
     state = {
         fetchedFarms: farms,
+        deleting: false,
+        farmToDelete: {
+            name: null,
+            id: null
+        }
+    }
+
+    deleteFarmHandler = (id) => {
+        const toDelete = this.state.fetchedFarms.find(farm => farm.id === id);
+        this.setState({
+            deleting: true,
+            farmToDelete: {
+                name: toDelete.name,
+                id: toDelete.id
+            }
+        })
+    }
+
+    cancelDeleteHandler = () => {
+        this.setState({
+            deleting: false
+        })
+    }
+
+    confirmDeleteHandler = () => {
+        const updatedFarms = this.state.fetchedFarms.filter(farm => farm.id !== this.state.farmToDelete.id);
+        this.setState({
+            fetchedFarms: updatedFarms,
+            deleting: false
+        });
+    }
+
+    detailsFarmHandler = (id) => {
+        alert('Not ready yet');
     }
 
     render() {
 
         const allFarms = this.state.fetchedFarms.map(farm =>
-            <Farm key={farm.id} farmProps={farm} />);
+            <Farm
+                deleteFarm={() => this.deleteFarmHandler(farm.id)}
+                detailsFarm={() => this.detailsFarmHandler(farm.id)}
+                key={farm.id}
+                farmDetails={farm}
+            />);
 
         return (
-            <div className='grid'>
-                {allFarms}
-            </div>
+            <>
+                <Modal cancel={this.cancelDeleteHandler} show={this.state.deleting} >
+                    <ConfirmAction
+                        content={`Czy na pewno chcesz usunąć fermę o nazwie "${this.state.farmToDelete.name}"? 
+                    Zmiany będą nie odwracalne.`}
+                        btnContent='usuń'
+                        confirm={this.confirmDeleteHandler}
+                        cancel={this.cancelDeleteHandler}
+                    />
+                </Modal>
+                <div className='grid'>
+                    {allFarms}
+                </div>
+            </>
         );
     }
 }
