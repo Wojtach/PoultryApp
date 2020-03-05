@@ -1,0 +1,43 @@
+.Toolbar {
+    height: 58px;
+    background-color: rgba(12, 10, 121);
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.Toolbar nav {
+    height: 100%;
+}
+
+.Burger {
+    position: relative;
+    width: 38px;
+    height: 70%;
+    cursor: pointer;
+}
+
+.Burger span {
+    background: #fff;
+    display: block;
+    width: 100%;
+    height: 4px;
+    margin: 5px 0;
+}
+
+@media screen and (max-width: 620px) {
+    .Mobile {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 620px) {
+    .Burger {
+        display: none;
+    }
+}
