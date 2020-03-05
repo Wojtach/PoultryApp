@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 
-import Layout from './components/Layout/Layout';
-import MyFarms from './containers/MyFarms/MyFarms'
+import { Route, Switch } from 'react-router-dom';
+
+import Layout from './containers/Layout/Layout';
+import MyFarms from './containers/MyFarms/MyFarms';
+import Farm from './components/Farm/Farm';
 
 class App extends Component {
   render() {
     return (
       <Layout>
-        <MyFarms />
+        <Switch>
+          {/* <Route path='/example' component={Farm} /> */}
+          <Route path='/' exact component={MyFarms} />
+        </Switch>
       </Layout>
     );
   }

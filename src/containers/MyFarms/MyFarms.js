@@ -26,6 +26,10 @@ const farms = [
                 name: 'Kurnik 4',
                 id: 'dfaees22faba'
             },
+            {
+                name: 'Kurnik 5',
+                id: 'dfaees22f33aba'
+            },
         ]
     },
     {

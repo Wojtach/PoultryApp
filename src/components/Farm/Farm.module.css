@@ -1,5 +1,8 @@
 .FarmContent {
     background-color: #C5A862;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
     margin-top: 30px;
     grid-column: 2/6;
     justify-self: center;
@@ -36,7 +39,7 @@
 
 .Buttons {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
     margin: 20px 0;
 }
