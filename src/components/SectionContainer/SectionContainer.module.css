@@ -1,0 +1,33 @@
+.SectionContent {
+    background-color: #C5A862;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 10px;
+    grid-column: 2/6;
+    justify-self: center;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid black;
+    box-shadow: 5px 4px 19px 4px rgba(0,0,0,0.42);
+}
+
+.SectionHeader {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 20px 30px;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+}
+
+@media screen and (min-width: 920px) {
+
+    .SectionContent:nth-child(odd) {
+        grid-column: 2/5;
+    }
+    .SectionContent:nth-child(even) {
+        grid-column: 6/9;
+    }
+}

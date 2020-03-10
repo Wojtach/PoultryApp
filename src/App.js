@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import Layout from './containers/Layout/Layout';
 import MyFarms from './containers/MyFarms/MyFarms';
-import Farm from './components/Farm/Farm';
+import FarmDetails from './containers/FarmDetails/FarmDetails';
 
 class App extends Component {
   render() {
@@ -12,7 +12,7 @@ class App extends Component {
       <Layout>
         <Switch>
           {/* <Route path='/example' component={Farm} /> */}
-          <Route path='/' exact component={MyFarms} />
+          <Route path='/' exact component={FarmDetails} />
         </Switch>
       </Layout>
     );

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import classes from './Farm.module.css';
-import Button from '../UI/Button/Button';
+import SectionContainer from '../SectionContainer/SectionContainer';
+import Button from '../UI/Buttons/Button/Button';
 
 const farm = (props) => {
 
@@ -14,8 +15,7 @@ const farm = (props) => {
     ))
 
     return (
-        <section className={classes.FarmContent}>
-            <header className={classes.FarmHeader}>{props.farmDetails.name}</header>
+        <SectionContainer headerText={props.farmDetails.name}>
             <ul className={classes.Halls}>
                 {halls}
             </ul>
@@ -23,7 +23,7 @@ const farm = (props) => {
                 <Button btnType='Normal' clicked={props.detailsFarm} >szczegóły</Button>
                 <Button btnType='Danger' clicked={props.deleteFarm}>usuń</Button>
             </div>
-        </section>
+        </SectionContainer>
     )
 }
 

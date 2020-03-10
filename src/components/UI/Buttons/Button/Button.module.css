@@ -1,0 +1,100 @@
+.Button {
+    text-transform: uppercase;
+    border: 1px solid black;
+    border-radius: 25px;
+    outline: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.ButtonBorderRadiusNone {
+    border-radius: 0px;
+}
+
+.Button:hover {
+    transition: 0.2s;
+    color: rgba(255,255,255, 0.8);
+}
+
+.Button:active {
+    transform: scale(1.02);
+    transition: 0.1s
+}
+
+.Success {
+    background-color: #abc08d;
+    
+}
+
+.Danger {
+    background-color: #ca6c6c;
+}
+
+.Normal {
+    background-color: #CCC;
+}
+
+.Success:hover {
+    background-color: #5c9210;
+}
+
+.Danger:hover {
+    background-color: #9c1717;
+}
+
+.Normal:hover {
+    background-color: #888;
+}
+
+
+
+.RoundButton {
+     margin: 0 8px;
+     cursor: pointer;
+	 border: 2px solid lightgrey;
+	 background-color: #fff;
+	 height: 2.5em;
+	 width: 2.5em;
+     border-radius: 99px;
+     display: none;
+}
+
+.RoundButtonOn {
+    display: block;
+}
+
+.S {
+    font-size: 8px;
+}
+.M {
+    font-size: 14px;
+}
+.L {
+    font-size: 18px;
+}
+
+.Plus, .Minus {
+    position: relative;
+}
+ .Plus:after, .Plus:before {
+	 content: "";
+	 display: block;
+	 background-color: grey;
+	 position: absolute;
+	 top: 50%;
+	 left: 50%;
+	 transform: translate(-50%, -50%);
+}
+ .Plus:before {
+	 height: 1em;
+	 width: 0.2em;
+}
+ .Plus:after {
+	 height: 0.2em;
+	 width: 1em;
+}
+ 
+ 
