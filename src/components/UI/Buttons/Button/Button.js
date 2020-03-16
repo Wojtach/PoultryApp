@@ -6,7 +6,7 @@ const button = (props) => {
     let btnClasses = [classes.Button, classes[props.btnType]];
 
     if (props.edit) {
-        btnClasses = [classes.RoundButton, classes[props.btnType], classes[props.size]];
+        btnClasses = [classes.RoundButton, classes[props.btnSign], classes[props.btnType], classes[props.size]];
         if (props.editmode) {
             btnClasses.push(classes.RoundButtonOn)
         }

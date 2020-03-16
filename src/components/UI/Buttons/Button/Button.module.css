@@ -25,7 +25,7 @@
 }
 
 .Success {
-    background-color: #abc08d;
+    background-color: #8bc934e8;
     
 }
 
@@ -54,8 +54,7 @@
 .RoundButton {
      margin: 0 8px;
      cursor: pointer;
-	 border: 2px solid lightgrey;
-	 background-color: #fff;
+	 border: 1px solid black;
 	 height: 2.5em;
 	 width: 2.5em;
      border-radius: 99px;
@@ -79,10 +78,11 @@
 .Plus, .Minus {
     position: relative;
 }
- .Plus:after, .Plus:before {
+
+ .Plus:after, .Plus:before, .Minus:after {
 	 content: "";
 	 display: block;
-	 background-color: grey;
+	 background-color: #333;
 	 position: absolute;
 	 top: 50%;
 	 left: 50%;
@@ -92,9 +92,11 @@
 	 height: 1em;
 	 width: 0.2em;
 }
- .Plus:after {
+ .Plus:after, .Minus:after {
 	 height: 0.2em;
 	 width: 1em;
 }
+
+
  
  

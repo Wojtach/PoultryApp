@@ -37,3 +37,5 @@ body {
     grid-template-columns: repeat(9, 1fr);
   }
 }
+
+button:focus { outline: none; }

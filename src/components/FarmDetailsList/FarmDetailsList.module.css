@@ -1,5 +1,12 @@
-.FarmDetailsList {
-    background-color: rgba(0,0,0, 0.8);
-    width: 100%;
-    grid-column: 3/4;
+.PlusContainer {
+   position: absolute;
+   top: 20px;
+   right: 8px;
 }
+
+.ListItem {
+    margin: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+}
+

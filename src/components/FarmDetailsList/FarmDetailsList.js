@@ -7,17 +7,17 @@ import Button from '../UI/Buttons/Button/Button';
 const farmDetailsList = (props) => {
 
     const farmDetail = props.arr.map(item => {
-        return <li key={item.id}>{item.lastname ? `${item.name} ${item.lastname}` : item.name}
-            <Button edit btnType='Minus' size='S' /></li>
+        return <li className={classes.ListItem} key={item.id}>{item.lastname ? `${item.name} ${item.lastname}` : item.name}
+            <Button edit btnType='Danger' size='S' btnSign='Minus' editmode={props.edit} /></li>
     });
 
     return (
         <SectionContainer headerText={props.name}>
-            <Button border btnType='Success'>Edytuj</Button>
+            <Button clicked={props.click} border btnType='Normal'>Edytuj</Button>
             <ul>
                 {farmDetail}
             </ul>
-            <Button edit btnType='Plus' size='L' editmode={false} />
+            <div className={classes.PlusContainer}><Button edit btnType='Success' btnSign='Plus' size='L' editmode={props.edit} /></div>
         </SectionContainer>
     );
 }

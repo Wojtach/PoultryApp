@@ -7,7 +7,7 @@ class FarmDetails extends Component {
     state = {
         edit: {
             workers: false,
-            halls: true,
+            halls: false,
             delivers: false
         },
         workers: [
@@ -34,21 +34,41 @@ class FarmDetails extends Component {
         ],
         delivers: [
             {
-                name: 'Wipasz',
-                id: '23sfsd3ee3ss2'
+                // name: 'Wipasz',
+                // id: '23sfsd3ee3ss2'
             },
             {
-                name: 'GasPol',
-                id: '23sfs22d33ssww2'
+                // name: 'GasPol',
+                // id: '23sfs22d33ssww2'
             },
         ]
     }
+
+    handleEditMode = (type) => {
+        console.log(type);
+        this.setState(prevState => ({
+            edit: {
+                ...prevState.edit,
+                [type]: !prevState.edit[type]
+            }
+        }))
+    }
+
     render() {
         return (
             <div className='grid'>
-                <FarmDetailsList name='Pracownicy' arr={this.state.workers} edit={this.state.edit.workers} />
-                <FarmDetailsList name='Kurniki' arr={this.state.halls} edit={this.state.edit.halls} />
-                <FarmDetailsList name='Dostawcy' arr={this.state.delivers} edit={this.state.edit.delivers} />
+                <FarmDetailsList name='Pracownicy'
+                    click={() => this.handleEditMode('workers')}
+                    arr={this.state.workers}
+                    edit={this.state.edit.workers} />
+                <FarmDetailsList name='Kurniki'
+                    click={() => this.handleEditMode('halls')}
+                    arr={this.state.halls}
+                    edit={this.state.edit.halls} />
+                <FarmDetailsList name='Dostawcy'
+                    click={() => this.handleEditMode('delivers')}
+                    arr={this.state.delivers}
+                    edit={this.state.edit.delivers} />
             </div>
         );
     }
