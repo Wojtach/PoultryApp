@@ -106,8 +106,7 @@ class MyFarms extends Component {
             <>
                 <Modal cancel={this.cancelDeleteHandler} show={this.state.deleting} >
                     <ConfirmAction
-                        content={`Czy na pewno chcesz usunąć fermę o nazwie "${this.state.farmToDelete.name}"? 
-                    Zmiany będą nie odwracalne.`}
+                        name={this.state.farmToDelete.name}
                         btnContent='usuń'
                         confirm={this.confirmDeleteHandler}
                         cancel={this.cancelDeleteHandler}

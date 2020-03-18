@@ -2,13 +2,18 @@ import React from 'react';
 
 import classes from './FarmDetailsList.module.css';
 import SectionContainer from '../SectionContainer/SectionContainer';
-import Button from '../UI/Buttons/Button/Button';
+import Button from '../UI/Button/Button';
 
 const farmDetailsList = (props) => {
 
     const farmDetail = props.arr.map(item => {
         return <li className={classes.ListItem} key={item.id}>{item.lastname ? `${item.name} ${item.lastname}` : item.name}
-            <Button edit btnType='Danger' size='S' btnSign='Minus' editmode={props.edit} /></li>
+            <Button edit
+                btnType='Danger'
+                size='S'
+                btnSign='Minus'
+                editmode={props.edit}
+                clicked={() => props.delete(item.id, props.name)} /></li>
     });
 
     return (
@@ -17,7 +22,7 @@ const farmDetailsList = (props) => {
             <ul>
                 {farmDetail}
             </ul>
-            <div className={classes.PlusContainer}><Button edit btnType='Success' btnSign='Plus' size='L' editmode={props.edit} /></div>
+            <div className={classes.PlusContainer}><Button edit btnType='Success' btnSign='Plus' size='M' editmode={props.edit} /></div>
         </SectionContainer>
     );
 }

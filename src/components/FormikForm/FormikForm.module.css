@@ -1,0 +1,24 @@
+.Form {
+background-color: #fff;
+border-radius: 20px;
+max-width: 1200px;
+margin: 40px 10px 0;
+display: flex;
+flex-flow: column;
+}
+
+.Form h2 {
+    text-align: center;
+}
+
+.FieldContainer {
+    display: inline-block;
+    margin: 10px auto 0;
+    width: auto;
+}
+
+.ButtonsContainer {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-around;
+}
