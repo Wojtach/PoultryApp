@@ -10,11 +10,12 @@ class FormikForm extends Component {
         return inputs.map(input => {
             return (
                 <div className={classes.FieldContainer} key={input.name}>
-                    <label htmlFor={input.name}>{input.label}</label>
-                    <div>
+                    <div className={classes.Field}>
+                        <label htmlFor={input.name}>{input.label}</label>
                         <Field name={input.name}>
                             {props => (
                                 <input
+                                    className={classes.Input}
                                     {...props.field}
                                     type='text'
                                     placeholder={input.placeholder}
@@ -42,9 +43,9 @@ class FormikForm extends Component {
         const initialValues = this.getInitValues(this.props.inputs);
         return (
             <div className={classes.Form}>
-                <h2>Dodaj pracownika</h2>
+                <h2>Dodaj {this.props.header}</h2>
                 <Formik
-                    onSubmit={values => (console.log(values))}
+                    onSubmit={values => this.props.addObject(this.props.type, values)}
                     validationSchema={this.props.validation} not yet
                     initialValues={initialValues}>
                     {formikProps => {
@@ -53,7 +54,7 @@ class FormikForm extends Component {
                                 {/* <pre>{JSON.stringify(formikProps.values, null, 2)}</pre> */}
                                 {this.createFileds(this.props.inputs)}
                                 <div className={classes.ButtonsContainer}>
-                                    <Button btnType='Danger'>Anuluj</Button>
+                                    <Button btnType='Danger' click={this.props.cancel}>Anuluj</Button>
                                     <Button btnType='Success' click={formikProps.handleSubmit}>Zatwierdź</Button>
                                 </div>
                             </Form>

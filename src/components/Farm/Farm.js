@@ -2,7 +2,7 @@ import React from 'react';
 
 import classes from './Farm.module.css';
 import SectionContainer from '../SectionContainer/SectionContainer';
-import Button from '../UI/Buttons/Button/Button';
+import Button from '../UI/Button/Button';
 
 const farm = (props) => {
 
