@@ -6,14 +6,18 @@ import Button from '../UI/Button/Button';
 
 const farmDetailsList = (props) => {
 
+    let isEditing = props.edit === props.name;
+
     const farmDetail = props.arr.map(item => {
-        return <li className={classes.ListItem} key={item.id}>{item.lastName ? `${item.name} ${item.lastName}` : item.name}
+        let toDisplay = item.lastName ? item.name + ' ' + item.lastName : item.name
+        return <li className={classes.ListItem} key={item.id}>
+            <span className={isEditing ? classes.EditObject : ''} onClick={() => props.objectToEdit(item.id)}>{toDisplay}</span>
             <Button edit
                 btnType='Danger'
                 size='S'
                 btnSign='Minus'
-                editmode={props.edit}
-                clicked={() => props.delete(item.id, props.name)} /></li>
+                editmode={isEditing}
+                clicked={() => props.delete(item.id, toDisplay)} /></li>
     });
 
     return (
@@ -22,7 +26,12 @@ const farmDetailsList = (props) => {
             <ul>
                 {farmDetail}
             </ul>
-            <div className={classes.PlusContainer}><Button edit btnType='Success' btnSign='Plus' size='M' editmode={props.edit} clicked={props.add} /></div>
+            <div className={classes.PlusContainer}>
+                <Button edit
+                    btnType='Success'
+                    btnSign='Plus'
+                    size='M' editmode={isEditing} clicked={props.showForm} />
+            </div>
         </SectionContainer>
     );
 }

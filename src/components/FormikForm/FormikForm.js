@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 
 import Button from '../UI/Button/Button';
 import classes from './FormikForm.module.css';
 
+import * as Yup from 'yup';
+
 class FormikForm extends Component {
 
-    createFileds(inputs) {
-        return inputs.map(input => {
+    createYupSchema = (schema, config) => {
+        const { name, validationType, validations = [] } = config;
+        if (!Yup[validationType]) {
+            return schema;
+        }
+        let validator = Yup[validationType]();
+        validations.forEach(validation => {
+            const { params, type } = validation;
+            if (!validator[type]) {
+                return;
+            }
+            validator = validator[type](...params);
+        });
+        schema[name] = validator;
+        return schema;
+    }
+
+    createFileds = (props) =>
+        this.props.inputs.map(input => {
+            let error = props.errors[input.name] && props.touched[input.name];
             return (
                 <div className={classes.FieldContainer} key={input.name}>
                     <div className={classes.Field}>
                         <label htmlFor={input.name}>{input.label}</label>
-                        <Field name={input.name}>
+                        <Field name={input.name} error={error}>
                             {props => (
                                 <input
-                                    className={classes.Input}
+                                    className={error ? [classes.InputError, classes.Input].join(' ') : classes.Input}
                                     {...props.field}
                                     type='text'
                                     placeholder={input.placeholder}
@@ -23,17 +43,22 @@ class FormikForm extends Component {
                                 />
                             )}
                         </Field>
+                        <div className={classes.ErrorMessage}>
+                            <ErrorMessage name={input.name} />
+                        </div>
+
                     </div>
                 </div>
             )
         })
-    }
 
     getInitValues(inputs) {
         const initialValues = {};
         inputs.forEach(field => {
-            if (!initialValues[field.name]) {
-                initialValues[field.name] = field.value;
+            if (this.props.objectToEdit) {
+                initialValues[field.name] = this.props.objectToEdit[field.name];
+            } else {
+                initialValues[field.name] = '';
             }
         });
         return initialValues;
@@ -41,21 +66,23 @@ class FormikForm extends Component {
 
     render() {
         const initialValues = this.getInitValues(this.props.inputs);
+        const yupSchema = this.props.inputs.reduce(this.createYupSchema, {});
+        const validationSchema = Yup.object().shape(yupSchema);
         return (
             <div className={classes.Form}>
-                <h2>Dodaj {this.props.header}</h2>
+                <h2>{this.props.objectToEdit ? 'Edytuj' : 'Dodaj'} {this.props.header}</h2>
                 <Formik
-                    onSubmit={values => this.props.addObject(this.props.type, values)}
-                    validationSchema={this.props.validation} not yet
+                    onSubmit={values => this.props.objectToEdit ?
+                        this.props.editObject(values) : this.props.addObject(values)}
+                    validationSchema={validationSchema}
                     initialValues={initialValues}>
                     {formikProps => {
                         return <div>
                             <Form>
-                                {/* <pre>{JSON.stringify(formikProps.values, null, 2)}</pre> */}
-                                {this.createFileds(this.props.inputs)}
+                                {this.createFileds(formikProps)}
                                 <div className={classes.ButtonsContainer}>
-                                    <Button btnType='Danger' click={this.props.cancel}>Anuluj</Button>
-                                    <Button btnType='Success' click={formikProps.handleSubmit}>Zatwierdź</Button>
+                                    <Button type='button' btnType='Danger' clicked={this.props.cancel}>Anuluj</Button>
+                                    <Button type='submit' btnType='Success' clicked={formikProps.onSubmit}>Zatwierdź</Button>
                                 </div>
                             </Form>
                         </div>

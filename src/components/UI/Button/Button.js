@@ -15,6 +15,7 @@ const button = (props) => {
 
     return (
         <button
+            type={props.type}
             onClick={props.clicked}
             className={btnClasses.join(' ')}>
             {props.children}

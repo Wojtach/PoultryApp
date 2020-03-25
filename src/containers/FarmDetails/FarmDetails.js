@@ -1,27 +1,23 @@
 import React, { Component } from 'react';
+import { animateScroll as scroll } from 'react-scroll'
 
 import Modal from '../../components/UI/Modal/Modal';
 import ConfirmAction from '../../components/ConfirmAction/ConfirmAction';
 import FarmDetailsList from '../../components/FarmDetailsList/FarmDetailsList';
 import FormikForm from '../../components/FormikForm/FormikForm';
 
-// dodać state do dodawania zeby formularz wyswietlalł sie po kliku w plus dopier i do tego dodać scrollTo i bedzie git
-// potem dodać reduxa zeby uporządkowac akcje i state - zrobić mniejszy komponent
+
 
 class FarmDetails extends Component {
     state = {
-        edit: {
-            pracownicy: false,
-            kurniki: false,
-            dostawcy: false
-        },
+        editType: null,
         deleting: false,
         objectToDelete: {
             name: null,
             id: null,
-            type: null
         },
-        formToRender: null,
+        objectToEdit: null,
+        showForm: false,
         fetchedData: {
             pracownicy: [
                 {
@@ -59,32 +55,34 @@ class FarmDetails extends Component {
     }
 
     handleEditMode = (type) => {
-        const defaultEdit = {}
-        for (let key in this.state.edit) {
-            defaultEdit[key] = false;
+        if (this.state.editType === type) {
+            this.setState({
+                editType: null,
+                showForm: false,
+            })
+        } else {
+            this.setState({
+                editType: type,
+                showForm: false,
+            })
         }
-        this.setState(prevState => ({
-            edit: {
-                ...defaultEdit,
-                [type]: !prevState.edit[type]
-            }
-        }))
     }
 
-    deleteObjectHandler = (id, type) => {
-        const toDelete = this.state.fetchedData[type].find(item => item.id === id);
+
+    deleteObjectHandler = (id, name) => {
+        const toDelete = this.state.fetchedData[this.state.editType].find(item => item.id === id);
         this.setState({
             deleting: true,
             objectToDelete: {
-                name: toDelete.name,
+                name,
                 id: toDelete.id,
-                type
             }
         })
     }
 
     confirmDeleteHandler = () => {
-        const { type, id } = this.state.objectToDelete;
+        const { id } = this.state.objectToDelete;
+        const type = this.state.editType;
         const updatedObjects = this.state.fetchedData[type].filter(object => object.id !== id);
         this.setState(prevState => ({
             fetchedData: {
@@ -101,10 +99,12 @@ class FarmDetails extends Component {
         })
     }
 
-    confirmAddObjectHandler = (type, object) => {
+    confirmAddObjectHandler = (object) => {
         let newObject = { ...object, id: Math.random() };
+        const type = this.state.editType;
         this.setState(prevState => ({
             ...prevState,
+            showForm: false,
             fetchedData: {
                 ...prevState.fetchedData,
                 [type]: [
@@ -113,13 +113,37 @@ class FarmDetails extends Component {
                 ]
             }
         }))
+        scroll.scrollToTop();
     }
 
-    toggleFormVisibilityhandler = () => {
-        let formToRender = Object.keys(this.state.edit).find(key => this.state.edit[key]);
+    objectToEdit = (id) => {
+        const { fetchedData, editType } = this.state;
+        const objectToEdit = fetchedData[editType].find(object => object.id === id);
         this.setState({
-            formToRender
-        })
+            objectToEdit,
+            showForm: true
+        }, scroll.scrollToBottom());
+    }
+
+    submitEditedObjectHandler = (values) => {
+        const { objectToEdit, fetchedData, editType } = this.state;
+        const editedObject = { ...values, id: objectToEdit.id };
+        const newArrayOfObjects = fetchedData[editType]
+            .map(item => item.id === editedObject.id ? editedObject : item);
+        this.setState({
+            objectToEdit: null,
+            fetchedData: {
+                ...fetchedData,
+                [editType]: newArrayOfObjects
+            }
+        }, this.showFormHandler)
+    }
+
+    showFormHandler = () => {
+        this.setState(prevState => ({
+            showForm: !prevState.showForm,
+            objectToEdit: null
+        }), () => this.state.showForm ? scroll.scrollToBottom() : scroll.scrollToTop())
     }
 
     render() {
@@ -140,19 +164,64 @@ class FarmDetails extends Component {
             dostawcy: {
                 header: 'dostawce',
                 fields: [
-                    { label: 'Nazwa', type: 'input', name: 'name', value: '', placeholder: 'Wpisz nazwe dostawcy' },
+                    {
+                        label: 'Nazwa',
+                        type: 'input',
+                        name: 'name',
+                        value: '',
+                        placeholder: 'Wpisz nazwe dostawcy',
+                        validationType: 'string',
+                        validations: [
+                            {
+                                type: 'required',
+                                params: ['Pole nie może być puste']
+                            },
+                            {
+                                type: 'min',
+                                params: [5, 'Nazwa musi składać się z więcej niż 5 znaków']
+                            },
+                            {
+                                type: 'max',
+                                params: [20, 'Nazwa musi składać się z mniej niż 20 znaków']
+                            }
+                        ]
+                    },
+                    {
+                        label: 'Właściciel',
+                        type: 'input',
+                        name: 'owner',
+                        value: '',
+                        placeholder: 'Wpisz nazwe właściciela',
+                        validationType: 'string',
+                        validations: [
+                            {
+                                type: 'required',
+                                params: ['Pole nie może być puste']
+                            },
+                            {
+                                type: 'min',
+                                params: [5, 'Nazwa musi składać się z więcej niż 5 znaków']
+                            },
+                            {
+                                type: 'max',
+                                params: [20, 'Nazwa musi składać się z mniej niż 20 znaków']
+                            }
+                        ]
+                    },
                 ]
             },
         };
 
-        const FarmDetails = Object.keys(this.state.fetchedData).map(type => {
+        const FarmDetails = Object.keys(this.state.fetchedData).map(objectType => {
             return <FarmDetailsList
-                key={type}
-                name={type}
-                click={() => this.handleEditMode(type)}
+                key={objectType}
+                name={objectType}
+                click={() => this.handleEditMode(objectType)}
+                objectToEdit={this.objectToEdit}
                 delete={this.deleteObjectHandler}
-                arr={this.state.fetchedData[type]}
-                edit={this.state.edit[type]} />
+                showForm={this.showFormHandler}
+                arr={this.state.fetchedData[objectType]}
+                edit={this.state.editType} />
         })
 
         return (
@@ -167,10 +236,13 @@ class FarmDetails extends Component {
                 <div className='grid'>
                     {FarmDetails}
                 </div>
-                {this.state.formToRender ? <FormikForm header={forms[this.state.formToRender].header}
-                    inputs={forms[this.state.formToRender].fields}
-                    type={this.state.formToRender}
-                    cancel={form}
+                {this.state.editType && this.state.showForm ? <FormikForm id='form' header={forms[this.state.editType].header}
+                    name='form'
+                    objectToEdit={this.state.objectToEdit}
+                    inputs={forms[this.state.editType].fields}
+                    type={this.state.editType}
+                    cancel={this.showFormHandler}
+                    editObject={this.submitEditedObjectHandler}
                     addObject={this.confirmAddObjectHandler} /> : null}
             </>
         );
