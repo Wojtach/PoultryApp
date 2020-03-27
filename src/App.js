@@ -11,8 +11,8 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
-          {/* <Route path='/example' component={Farm} /> */}
-          <Route path='/' exact component={FarmDetails} />
+          <Route path='/farmdetails' component={FarmDetails} />
+          <Route path='/' component={MyFarms} />
         </Switch>
       </Layout>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import Farm from '../../components/Farm/Farm';
 import Modal from '../../components/UI/Modal/Modal';
@@ -89,7 +90,10 @@ class MyFarms extends Component {
     }
 
     detailsFarmHandler = (id) => {
-        alert('Not ready yet');
+        // i przechodzi do szczegółów
+        console.log(this.props);
+        this.props.history.push('/farmdetails')
+        //pobiera dane do store
     }
 
     render() {

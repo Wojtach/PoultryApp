@@ -8,7 +8,8 @@ const farm = (props) => {
 
     const halls = props.farmDetails.halls.map(hall => (
         <li className={classes.Hall} key={hall.id}>
-            <a href="">
+            <a>
+                {/* link to hall */}
                 {hall.name}
             </a>
         </li>

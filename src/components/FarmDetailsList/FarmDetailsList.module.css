@@ -10,6 +10,16 @@
     justify-content: space-between;
 }
 
+@keyframes blinking{
+    50% {
+        color: rgb(8, 66, 8);
+    }
+}
+
 .EditObject {
     cursor: pointer;
+    animation-name: blinking;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
+

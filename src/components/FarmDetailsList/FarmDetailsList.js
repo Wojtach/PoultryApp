@@ -11,7 +11,9 @@ const farmDetailsList = (props) => {
     const farmDetail = props.arr.map(item => {
         let toDisplay = item.lastName ? item.name + ' ' + item.lastName : item.name
         return <li className={classes.ListItem} key={item.id}>
-            <span className={isEditing ? classes.EditObject : ''} onClick={() => props.objectToEdit(item.id)}>{toDisplay}</span>
+            <span className={isEditing ? classes.EditObject : ''}
+                onClick={isEditing ? () => props.objectToEdit(item.id) : null}>
+                {toDisplay}</span>
             <Button edit
                 btnType='Danger'
                 size='S'
