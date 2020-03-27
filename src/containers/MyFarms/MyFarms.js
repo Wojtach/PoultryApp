@@ -90,10 +90,9 @@ class MyFarms extends Component {
     }
 
     detailsFarmHandler = (id, farmName) => {
-        // i przechodzi do szczegółów
-        console.log(this.props);
-        this.props.history.push(`/farmdetails/${farmName.replace(' ', '_')}`);
-        //pobiera dane do store
+        this.props.history.push(`/myfarms/farmdetails/${farmName.replace(' ', '_')}`);
+        //pobiera dane o kurnikach dostawcach i pracownikach do store
+        //pobiera dane o formularzu do store
     }
 
     render() {

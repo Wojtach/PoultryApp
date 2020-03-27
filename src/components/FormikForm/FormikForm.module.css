@@ -1,7 +1,7 @@
 .Form {
 background-color: rgb(200, 200, 200);
 border-radius: 20px;
-max-width: 1200px;
+max-width: 980px;
 margin: 40px 10px 0;
 }
 
@@ -43,4 +43,10 @@ margin: 40px 10px 0;
       height: 0.6em;
       font-size: 0.6em;
       color: rgb(214, 1, 1);
+  }
+
+  @media screen and (min-width: 920px) {
+      .Form {
+          margin: 40px auto 0;
+      }
   }
