@@ -89,10 +89,10 @@ class MyFarms extends Component {
         });
     }
 
-    detailsFarmHandler = (id) => {
+    detailsFarmHandler = (id, farmName) => {
         // i przechodzi do szczegółów
         console.log(this.props);
-        this.props.history.push('/farmdetails')
+        this.props.history.push(`/farmdetails/${farmName.replace(' ', '_')}`);
         //pobiera dane do store
     }
 
@@ -101,7 +101,7 @@ class MyFarms extends Component {
         const allFarms = this.state.fetchedFarms.map(farm =>
             <Farm
                 deleteFarm={() => this.deleteFarmHandler(farm.id)}
-                detailsFarm={() => this.detailsFarmHandler(farm.id)}
+                detailsFarm={() => this.detailsFarmHandler(farm.id, farm.name)}
                 key={farm.id}
                 farmDetails={farm}
             />);

@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
-          <Route path='/farmdetails' component={FarmDetails} />
+          <Route path='/farmdetails/:farmName' component={FarmDetails} />
           <Route path='/' component={MyFarms} />
         </Switch>
       </Layout>

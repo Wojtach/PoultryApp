@@ -233,6 +233,7 @@ class FarmDetails extends Component {
                         cancel={this.cancelDeleteHandler}
                     />
                 </Modal>
+                <h2 style={{ textAlign: 'center' }}>{this.props.match.params.farmName.replace('_', ' ')}</h2>
                 <div className='grid'>
                     {FarmDetails}
                 </div>
