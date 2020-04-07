@@ -81,8 +81,8 @@ class FormikForm extends Component {
                             <Form>
                                 {this.createFileds(formikProps)}
                                 <div className={classes.ButtonsContainer}>
-                                    <Button type='button' btnType='Danger' clicked={this.props.cancel}>Anuluj</Button>
-                                    <Button type='submit' btnType='Success' clicked={formikProps.onSubmit}>Zatwierdź</Button>
+                                    <Button btnType='Danger' clicked={this.props.cancel}>Anuluj</Button>
+                                    <Button submit btnType='Success' clicked={formikProps.onSubmit}>Zatwierdź</Button>
                                 </div>
                             </Form>
                         </div>

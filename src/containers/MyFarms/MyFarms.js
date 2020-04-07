@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import Farm from '../../components/Farm/Farm';
 import Modal from '../../components/UI/Modal/Modal';
@@ -9,7 +8,6 @@ const farms = [
     {
         id: '1234ddcd',
         name: 'Ferma Owieczki',
-        adress: 'Owieczki 25',
         halls: [
             {
                 name: 'Kurnik 1',
@@ -36,7 +34,6 @@ const farms = [
     {
         id: '1234dwwdcd',
         name: 'Ferma Prostki',
-        adress: 'Prostki 35',
         halls: [
             {
                 name: 'Kurnik A',

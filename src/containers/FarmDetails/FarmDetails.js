@@ -237,7 +237,9 @@ class FarmDetails extends Component {
                 <div className='grid'>
                     {FarmDetails}
                 </div>
-                {this.state.editType && this.state.showForm ? <FormikForm id='form' header={forms[this.state.editType].header}
+                {this.state.editType && this.state.showForm ? <FormikForm
+                    id='form'
+                    header={forms[this.state.editType].header}
                     name='form'
                     objectToEdit={this.state.objectToEdit}
                     inputs={forms[this.state.editType].fields}
