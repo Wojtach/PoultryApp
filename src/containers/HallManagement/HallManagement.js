@@ -16,49 +16,72 @@ class HallManagement extends Component {
 
     componentDidMount() {
         // api zwraca peroids if null set peroids as [{id: 1, end: ' '}]
-        const peroids = [
-            // {
-            //     id: 1,
-            //     end: ' '
-            // }
-            {
-                id: 'ddde',
-                days: {
-                    count: 1,
-                    date: {}
-                },
-                start: '10.01.2020',
-                end: null
+        const peroids = {
+            1: {
+                id: 1,
+                end: ' ',
+                daysCount: 0
             },
-            {
-                id: 'rkere',
-                days: [{}, {}, {}],
-                start: '02.11.2019',
-                end: '28.12.2019'
-            }
-        ]
+            // 3123123123: {
+            //     id: '3123123123',
+            //     start: '10.01.2020',
+            //     end: null,
+            //     days: id of array with days of chosen peroid, 
+            //     daysCount: 33
+            //   
+            // },
+            // 31231233132133: {
+            //     id: '31231233132133',
+            //     start: '10.01.2020',
+            //     end: '20.12.2019',
+            //     days: {
+            //         count: 10,
+            //         data: {}
+            //     },
+            // },
+        }
+        // [
+        // {
+        //     id: 1,
+        //     end: ' '
+        // }
+        //     {
+        //         id: 'ddde',
+        //         days: {
+        //             count: 1,
+        //             date: {}
+        //         },
+        //         start: '10.01.2020',
+        //         end: null
+        //     },
+        //     {
+        //         id: 'rkere',
+        //         days: [{}, {}, {}],
+        //         start: '02.11.2019',
+        //         end: '28.12.2019'
+        //     }
+        // ]
         this.setState({
             peroids,
-            selectedValue: peroids[0].id,
-            selectedPeroid: peroids[0],
+            selectedValue: Object.keys(peroids)[0],
+            selectedPeroid: peroids[Object.keys(peroids)[0]],
         })
     }
     selectHandler = (event) => {
-        const selectedPeroid = this.state.peroids.find(peroid => peroid.id === event.target.value);
         this.setState({
             selectedValue: event.target.value,
-            selectedPeroid
+            selectedPeroid: {
+                ...this.state.peroids[event.target.value]
+            }
         })
     }
 
     closePeroidHandler = () => {
         const peroidToClose = { ...this.state.selectedPeroid };
         peroidToClose.end = new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" });
-        const newPeroids = [...this.state.peroids];
-        newPeroids[0] = peroidToClose;
         this.setState({
-            peroids: newPeroids,
-            selectedPeroid: peroidToClose
+            selectedPeroid: peroidToClose,
+            peroids: { ...this.state.peroids, [peroidToClose.id]: peroidToClose },
         })
     }
 
@@ -69,53 +92,70 @@ class HallManagement extends Component {
     }
 
     startPeroidHandler = () => {
+        const id = generateId();
         const newPeroid = {
-            id: generateId(),
-            days: [],
+            id,
+            daysCount: 0,
+            days: 213213,
             start: new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" }),
             end: null
         }
-        if (this.state.selectedValue !== 1) {
+        if (this.state.selectedValue !== '1') {
             this.setState({
-                peroids: [newPeroid, ...this.state.peroids],
-                selectedValue: newPeroid.id,
+                peroids: { [id]: newPeroid, ...this.state.peroids },
+                selectedValue: id,
                 selectedPeroid: newPeroid
             })
         } else {
             this.setState({
-                peroids: [newPeroid],
-                selectedValue: newPeroid.id,
+                peroids: { [id]: newPeroid },
+                selectedValue: id,
                 selectedPeroid: newPeroid
             })
         }
     }
 
-    // confirmAddDayHandler = (values) => {
-    //     const newDay = {
-    //         ...values,
-    //         id: generateId(),
-    //         date: new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" })
-    //     }
-    //     const newDays = [newDay, ...this.state.selectedPeroid.days];
-    //     this.setState(prevState => {
-    //         peroids
-    //     })
-    // }
+    confirmAddDayHandler = (values) => {
+        const date = new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" });
+        const newDay = {
+            ...values,
+            id: generateId(),
+        }
+        this.setState(prevState => ({
+            peroids: {
+                ...prevState.peroids,
+                [prevState.selectedValue]: {
+                    ...prevState.peroids[prevState.selectedValue],
+                    days: {
+                        [date]: newDay,
+                        ...prevState.peroids[prevState.selectedValue].days,
+                        count: prevState.peroids[prevState.selectedValue].daysCount + 1
+                    }
+                }
+            },
+            selectedPeroid: {
+                ...prevState.selectedPeroid,
+                daysCount: prevState.selectedPeroid.daysCount + 1
+            }
+        }))
+    }
 
     render() {
+        const { peroids, selectedValue, selectedPeroid } = this.state;
         let selectOpt = null;
         let daysContainer = null;
-        if (this.state.selectedValue && this.state.selectedValue !== 1) {
+        if (selectedValue && selectedValue !== '1') {
+            console.log(this.state.selectedPeroid.daysCount);
 
-            selectOpt = this.state.peroids.map(option => {
-                return <option key={option.id} value={option.id}>
-                    {`${option.start} - ${option.end ? option.end : 'teraz'}`}
+            selectOpt = Object.keys(peroids).map(peroid => {
+                return <option key={peroid} value={peroid}>
+                    {`${peroids[peroid].start} - ${peroids[peroid].end ? peroids[peroid].end : 'teraz'}`}
                 </option>
             })
 
-            daysContainer = this.state.selectedPeroid.days.length ? <ul className={classes.DaysContainer}>
+            daysContainer = selectedPeroid.daysCount ? <ul className={classes.DaysContainer}>
                 {
-                    [...Array(this.state.selectedPeroid.days.length).keys()].map(i => <li className={classes.Day} key={i}>{i + 1}</li>).reverse()
+                    [...Array(selectedPeroid.daysCount).keys()].map(i => <li className={classes.Day} key={i}>{i + 1}</li>).reverse()
                 }
             </ul> : null;
         } else {
@@ -201,7 +241,7 @@ class HallManagement extends Component {
                                 {selectOpt}
                             </select></div>
                         <div className={classes.Buttons}>
-                            {this.state.selectedPeroid === this.state.peroids[0] ? this.state.selectedPeroid.end ? <Button clicked={this.startPeroidHandler} btnType='Success'>Rozpocznij okres</Button> : <Button btnType='Danger' clicked={this.closePeroidHandler}>Zakończ okres</Button> : null}
+                            {this.state.selectedPeroid === this.state.peroids[Object.keys(this.state.peroids)[0]] ? this.state.selectedPeroid.end ? <Button clicked={this.startPeroidHandler} btnType='Success'>Rozpocznij okres</Button> : <Button btnType='Danger' clicked={this.closePeroidHandler}>Zakończ okres</Button> : null}
                             {this.state.selectedPeroid.end ? null : <Button clicked={this.showFormHandler} btnType='Success'>Dodaj dzień</Button>}
                             <Button btnType='Normal'>Dodaj notatke</Button>
                         </div>
@@ -210,7 +250,7 @@ class HallManagement extends Component {
                     : <Spinner />}
                 {this.state.showForm && this.state.selectedPeroid ? <FormikForm
                     id='form'
-                    header={'Dzień ' + (this.state.selectedPeroid.days.length + 1)}
+                    header={'Dzień ' + (this.state.selectedPeroid.daysCount + 1)}
                     objectToEdit={this.state.objectToEdit}
                     inputs={fields}
                     cancel={this.showFormHandler}
