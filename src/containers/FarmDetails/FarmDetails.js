@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { animateScroll as scroll } from 'react-scroll'
 
 import Modal from '../../components/UI/Modal/Modal';
 import ConfirmAction from '../../components/ConfirmAction/ConfirmAction';
@@ -113,7 +112,6 @@ class FarmDetails extends Component {
                 ]
             }
         }))
-        scroll.scrollToTop();
     }
 
     objectToEdit = (id) => {
@@ -122,7 +120,7 @@ class FarmDetails extends Component {
         this.setState({
             objectToEdit,
             showForm: true
-        }, scroll.scrollToBottom());
+        });
     }
 
     submitEditedObjectHandler = (values) => {
@@ -143,7 +141,7 @@ class FarmDetails extends Component {
         this.setState(prevState => ({
             showForm: !prevState.showForm,
             objectToEdit: null
-        }), () => this.state.showForm ? scroll.scrollToBottom() : scroll.scrollToTop())
+        }))
     }
 
     render() {

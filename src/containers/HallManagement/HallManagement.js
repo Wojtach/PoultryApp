@@ -8,10 +8,12 @@ import FormikForm from '../../components/FormikForm/FormikForm';
 
 class HallManagement extends Component {
     state = {
+        daysOfPeroid: [],
         peroids: null,
         selectedValue: '',
         selectedPeroid: null,
-        showForm: false
+        showForm: false,
+        indexOfDay: null
     }
 
     componentDidMount() {
@@ -23,16 +25,15 @@ class HallManagement extends Component {
             // }
             {
                 id: 'ddde',
-                days: {
-                    count: 1,
-                    date: {}
-                },
+                days: 'idOfArray',
+                count: 22,
                 start: '10.01.2020',
                 end: null
             },
             {
                 id: 'rkere',
-                days: [{}, {}, {}],
+                days: 'reffee',
+                count: 1,
                 start: '02.11.2019',
                 end: '28.12.2019'
             }
@@ -47,31 +48,35 @@ class HallManagement extends Component {
         const selectedPeroid = this.state.peroids.find(peroid => peroid.id === event.target.value);
         this.setState({
             selectedValue: event.target.value,
-            selectedPeroid
+            selectedPeroid,
+            showForm: false
         })
     }
 
     closePeroidHandler = () => {
         const peroidToClose = { ...this.state.selectedPeroid };
         peroidToClose.end = new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" });
-        const newPeroids = [...this.state.peroids];
-        newPeroids[0] = peroidToClose;
+        const updatedPeroids = [...this.state.peroids];
+        updatedPeroids[0] = peroidToClose;
         this.setState({
-            peroids: newPeroids,
-            selectedPeroid: peroidToClose
+            peroids: updatedPeroids,
+            selectedPeroid: peroidToClose,
+            showForm: false
         })
     }
 
     showFormHandler = () => {
         this.setState(prevState => ({
-            showForm: !prevState.showForm
+            showForm: !prevState.showForm,
+            indexOfDay: null
         }))
     }
 
     startPeroidHandler = () => {
         const newPeroid = {
             id: generateId(),
-            days: [],
+            days: 'daedde',
+            count: 0,
             start: new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" }),
             end: null
         }
@@ -90,17 +95,44 @@ class HallManagement extends Component {
         }
     }
 
-    // confirmAddDayHandler = (values) => {
-    //     const newDay = {
-    //         ...values,
-    //         id: generateId(),
-    //         date: new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" })
-    //     }
-    //     const newDays = [newDay, ...this.state.selectedPeroid.days];
-    //     this.setState(prevState => {
-    //         peroids
-    //     })
-    // }
+    confirmAddDayHandler = (values) => {
+        const newDay = {
+            id: generateId(),
+            date: new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" }),
+            ...values,
+        }
+        const updatedDays = [...this.state.daysOfPeroid, newDay];
+        const updatedPeroid = {
+            ...this.state.selectedPeroid,
+            count: this.state.selectedPeroid.count + 1
+        };
+        const updatedPeroids = [...this.state.peroids];
+        updatedPeroids[0] = updatedPeroid;
+        this.setState({
+            peroids: updatedPeroids,
+            daysOfPeroid: updatedDays,
+            selectedPeroid: updatedPeroid,
+            showForm: false
+        })
+    }
+
+    showDayHandler = (index) => {
+        this.setState({
+            indexOfDay: index,
+            showForm: true,
+        });
+    }
+
+    confirmEditDayHandler = (values) => {
+        const { daysOfPeroid, indexOfDay } = this.state;
+        const days = [...daysOfPeroid];
+        const editedDay = { ...daysOfPeroid[indexOfDay], ...values };
+        days[indexOfDay] = editedDay;
+        this.setState({
+            daysOfPeroid: days,
+            showForm: false
+        })
+    }
 
     render() {
         let selectOpt = null;
@@ -113,9 +145,9 @@ class HallManagement extends Component {
                 </option>
             })
 
-            daysContainer = this.state.selectedPeroid.days.length ? <ul className={classes.DaysContainer}>
+            daysContainer = this.state.selectedPeroid.count ? <ul className={classes.DaysContainer}>
                 {
-                    [...Array(this.state.selectedPeroid.days.length).keys()].map(i => <li className={classes.Day} key={i}>{i + 1}</li>).reverse()
+                    [...Array(this.state.selectedPeroid.count).keys()].map(i => <li onClick={this.state.showForm ? null : () => this.showDayHandler(i)} className={classes.Day} key={i}>{i + 1}</li>).reverse()
                 }
             </ul> : null;
         } else {
@@ -209,9 +241,8 @@ class HallManagement extends Component {
                     </div>
                     : <Spinner />}
                 {this.state.showForm && this.state.selectedPeroid ? <FormikForm
-                    id='form'
-                    header={'Dzień ' + (this.state.selectedPeroid.days.length + 1)}
-                    objectToEdit={this.state.objectToEdit}
+                    header={`dzień ${this.state.indexOfDay + 1 ? this.state.indexOfDay + 1 : this.state.selectedPeroid.count + 1}`}
+                    objectToEdit={this.state.daysOfPeroid[this.state.indexOfDay]}
                     inputs={fields}
                     cancel={this.showFormHandler}
                     editObject={this.confirmEditDayHandler}

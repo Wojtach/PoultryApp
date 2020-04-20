@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { animateScroll as scroll } from 'react-scroll'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 
 import Button from '../UI/Button/Button';
@@ -7,6 +8,13 @@ import classes from './FormikForm.module.css';
 import * as Yup from 'yup';
 
 class FormikForm extends Component {
+
+    componentDidMount() {
+        scroll.scrollToBottom();
+    }
+    componentWillUnmount() {
+        scroll.scrollToTop();
+    }
 
     createYupSchema = (schema, config) => {
         const { name, validationType, validations = [] } = config;
