@@ -11,7 +11,9 @@ const farms = [
         halls: [
             {
                 name: 'Kurnik 1',
-                id: 'dfasfaba'
+                id: 'dfasfaba',
+                peroids: 'ididid',
+                note: 'Weterynarz ostatnia wizyta 20.20.20'
             },
             {
                 name: 'Kurnik 2',
@@ -92,6 +94,7 @@ class MyFarms extends Component {
         //pobiera dane o formularzu do store
     }
 
+
     render() {
 
         const allFarms = this.state.fetchedFarms.map(farm =>
@@ -106,7 +109,7 @@ class MyFarms extends Component {
             <>
                 <Modal cancel={this.cancelDeleteHandler} show={this.state.deleting} >
                     <ConfirmAction
-                        name={this.state.farmToDelete.name}
+                        content={'Czy napewno chcesz usunąć fermę o nazwie ' + this.state.farmToDelete.name}
                         btnContent='usuń'
                         confirm={this.confirmDeleteHandler}
                         cancel={this.cancelDeleteHandler}

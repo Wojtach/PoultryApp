@@ -13,10 +13,10 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
+          <Route path='/myfarms/:farmName/:hallName/:hallId' component={HallManagement} />
           <Route path='/myfarms/farmdetails/:farmName' component={FarmDetails} />
           <Route path='/myfarms' component={MyFarms} />
-          <Route path='/' component={HallManagement} />
-          {/* <Route path='/' component={HomePage} /> */}
+          <Route path='/' component={HomePage} />
         </Switch>
       </Layout>
     );

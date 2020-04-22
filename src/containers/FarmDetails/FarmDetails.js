@@ -226,7 +226,8 @@ class FarmDetails extends Component {
             <>
                 <Modal cancel={this.cancelDeleteHandler} show={this.state.deleting} >
                     <ConfirmAction
-                        name={this.state.objectToDelete.name}
+                        content={'Czy napewno chcesz usunac obiekt o nazwie ' + this.state.objectToDelete.name}
+                        btnContent='usuń'
                         confirm={this.confirmDeleteHandler}
                         cancel={this.cancelDeleteHandler}
                     />

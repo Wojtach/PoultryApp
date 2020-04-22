@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { v1 as generateId } from 'uuid';
 
 import classes from './HallManagement.module.css';
+import Modal from '../../components/UI/Modal/Modal';
+import ConfirmAction from '../../components/ConfirmAction/ConfirmAction';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import FormikForm from '../../components/FormikForm/FormikForm';
@@ -12,8 +14,9 @@ class HallManagement extends Component {
         peroids: null,
         selectedValue: '',
         selectedPeroid: null,
+        indexOfDay: null,
         showForm: false,
-        indexOfDay: null
+        modalVisibility: false,
     }
 
     componentDidMount() {
@@ -54,6 +57,18 @@ class HallManagement extends Component {
     }
 
     closePeroidHandler = () => {
+        this.setState({
+            modalVisibility: true
+        })
+    }
+
+    cancelClosePeroidHandler = () => {
+        this.setState({
+            modalVisibility: false
+        })
+    }
+
+    confirmClosePeroidHandler = () => {
         const peroidToClose = { ...this.state.selectedPeroid };
         peroidToClose.end = new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" });
         const updatedPeroids = [...this.state.peroids];
@@ -61,7 +76,8 @@ class HallManagement extends Component {
         this.setState({
             peroids: updatedPeroids,
             selectedPeroid: peroidToClose,
-            showForm: false
+            showForm: false,
+            modalVisibility: false
         })
     }
 
@@ -222,27 +238,38 @@ class HallManagement extends Component {
                 ]
             },
         ]
-
+        const { indexOfDay, selectedValue, peroids, selectedPeroid, showForm, daysOfPeroid, modalVisibility } = this.state;
+        const { farmName, hallName } = this.props.match.params;
         return (
             <>
-                {this.state.peroids ?
+                {peroids ?
                     <div>
-                        <h1 style={{ textAlign: "center" }}>Nazwa Fermy - Nazwa Kurnika</h1>
+                        <h1 style={{ textAlign: "center" }}>{farmName.replace('_', ' ') + ' - ' + hallName.replace('_', ' ')}</h1>
                         <div className={classes.Dropdown}>
-                            <select className={classes.Select} id='peroid' value={this.state.selectedValue} onChange={this.selectHandler}>
+                            <select className={classes.Select} id='peroid' value={selectedValue} onChange={this.selectHandler}>
                                 {selectOpt}
                             </select></div>
                         <div className={classes.Buttons}>
-                            {this.state.selectedPeroid === this.state.peroids[0] ? this.state.selectedPeroid.end ? <Button clicked={this.startPeroidHandler} btnType='Success'>Rozpocznij okres</Button> : <Button btnType='Danger' clicked={this.closePeroidHandler}>Zakończ okres</Button> : null}
-                            {this.state.selectedPeroid.end ? null : <Button clicked={this.showFormHandler} btnType='Success'>Dodaj dzień</Button>}
+                            {selectedPeroid === peroids[0] ? selectedPeroid.end ? <Button clicked={this.startPeroidHandler} btnType='Success'>Rozpocznij okres</Button> : <Button btnType='Danger' clicked={this.closePeroidHandler}>Zakończ okres</Button> : null}
+                            {selectedPeroid.end ? null : <Button clicked={this.showFormHandler} btnType='Success'>Dodaj dzień</Button>}
                             <Button btnType='Normal'>Dodaj notatke</Button>
                         </div>
                         {daysContainer}
+                        <Modal cancel={this.cancelClosePeroidHandler} show={modalVisibility} >
+                            <ConfirmAction
+                                content={`Czy na pewno chcesz zakończyć okres trwający od ${selectedPeroid.start}`}
+                                btnContent='Zakończ okres'
+                                confirm={this.confirmClosePeroidHandler}
+                                cancel={this.cancelClosePeroidHandler}
+                            />
+                        </Modal>
                     </div>
                     : <Spinner />}
-                {this.state.showForm && this.state.selectedPeroid ? <FormikForm
-                    header={`dzień ${this.state.indexOfDay + 1 ? this.state.indexOfDay + 1 : this.state.selectedPeroid.count + 1}`}
-                    objectToEdit={this.state.daysOfPeroid[this.state.indexOfDay]}
+
+
+                {showForm && selectedPeroid ? <FormikForm
+                    header={`dzień ${indexOfDay + 1 ? indexOfDay + 1 : selectedPeroid.count + 1}`}
+                    objectToEdit={daysOfPeroid[indexOfDay]}
                     inputs={fields}
                     cancel={this.showFormHandler}
                     editObject={this.confirmEditDayHandler}

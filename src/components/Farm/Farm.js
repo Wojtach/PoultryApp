@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import classes from './Farm.module.css';
 import SectionContainer from '../SectionContainer/SectionContainer';
@@ -8,10 +9,10 @@ const farm = (props) => {
 
     const halls = props.farmDetails.halls.map(hall => (
         <li className={classes.Hall} key={hall.id}>
-            <a>
-                {/* link to hall */}
-                {hall.name}
-            </a>
+            <Link
+                className={classes.Link}
+                to={`myfarms/${props.farmDetails.name.replace(' ', '_')}/${hall.name.replace(' ', '_')}/${hall.id}`}>
+                {hall.name}</Link>
         </li>
     ))
 
