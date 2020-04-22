@@ -44,15 +44,13 @@ class HallManagement extends Component {
         ]
         this.setState({
             peroids,
-            selectedValue: peroids[0].id,
-            selectedPeroid: peroids[0],
+            selectedValue: Object.keys(peroids)[0],
+            selectedPeroid: peroids[Object.keys(peroids)[0]],
         })
     }
     selectHandler = (event) => {
-        const selectedPeroid = this.state.peroids.find(peroid => peroid.id === event.target.value);
         this.setState({
             selectedValue: event.target.value,
-            selectedPeroid,
             showForm: false
         })
     }
@@ -90,6 +88,7 @@ class HallManagement extends Component {
     }
 
     startPeroidHandler = () => {
+        const id = generateId();
         const newPeroid = {
             id: generateId(),
             days: 'daedde',
@@ -97,16 +96,16 @@ class HallManagement extends Component {
             start: new Date().toLocaleDateString("pl", { year: "numeric", day: "2-digit", month: "2-digit" }),
             end: null
         }
-        if (this.state.selectedValue !== 1) {
+        if (this.state.selectedValue !== '1') {
             this.setState({
-                peroids: [newPeroid, ...this.state.peroids],
-                selectedValue: newPeroid.id,
+                peroids: { [id]: newPeroid, ...this.state.peroids },
+                selectedValue: id,
                 selectedPeroid: newPeroid
             })
         } else {
             this.setState({
-                peroids: [newPeroid],
-                selectedValue: newPeroid.id,
+                peroids: { [id]: newPeroid },
+                selectedValue: id,
                 selectedPeroid: newPeroid
             })
         }
@@ -166,13 +165,15 @@ class HallManagement extends Component {
     }
 
     render() {
+        const { indexOfDay, selectedValue, peroids, selectedPeroid, showForm, daysOfPeroid, modalVisibility, showNote } = this.state;
+        const { farmName, hallName } = this.props.match.params;
+
         let selectOpt = null;
         let daysContainer = null;
-        if (this.state.selectedValue && this.state.selectedValue !== 1) {
-
-            selectOpt = this.state.peroids.map(option => {
-                return <option key={option.id} value={option.id}>
-                    {`${option.start} - ${option.end ? option.end : 'teraz'}`}
+        if (selectedValue && selectedValue !== '1') {
+            selectOpt = Object.keys(peroids).map(peroid => {
+                return <option key={peroid} value={peroid}>
+                    {`${peroids[peroid].start} - ${peroids[peroid].end ? peroids[peroid].end : 'teraz'}`}
                 </option>
             })
 
@@ -253,8 +254,7 @@ class HallManagement extends Component {
                 ]
             },
         ]
-        const { indexOfDay, selectedValue, peroids, selectedPeroid, showForm, daysOfPeroid, modalVisibility, showNote } = this.state;
-        const { farmName, hallName } = this.props.match.params;
+
         return (
             <>
                 {peroids ?
