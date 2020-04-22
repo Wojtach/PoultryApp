@@ -17,6 +17,7 @@ class HallManagement extends Component {
         indexOfDay: null,
         showForm: false,
         modalVisibility: false,
+        showNote: false
     }
 
     componentDidMount() {
@@ -150,6 +151,20 @@ class HallManagement extends Component {
         })
     }
 
+    showNoteHandler = () => {
+        this.setState(prevState => ({
+            showNote: !prevState.showNote,
+            showForm: false
+        }))
+    }
+
+    confirmEditNoteHandler = (value) => {
+        console.log(value);
+        this.setState({
+            showNote: false,
+        })
+    }
+
     render() {
         let selectOpt = null;
         let daysContainer = null;
@@ -238,7 +253,7 @@ class HallManagement extends Component {
                 ]
             },
         ]
-        const { indexOfDay, selectedValue, peroids, selectedPeroid, showForm, daysOfPeroid, modalVisibility } = this.state;
+        const { indexOfDay, selectedValue, peroids, selectedPeroid, showForm, daysOfPeroid, modalVisibility, showNote } = this.state;
         const { farmName, hallName } = this.props.match.params;
         return (
             <>
@@ -252,13 +267,13 @@ class HallManagement extends Component {
                         <div className={classes.Buttons}>
                             {selectedPeroid === peroids[0] ? selectedPeroid.end ? <Button clicked={this.startPeroidHandler} btnType='Success'>Rozpocznij okres</Button> : <Button btnType='Danger' clicked={this.closePeroidHandler}>Zakończ okres</Button> : null}
                             {selectedPeroid.end ? null : <Button clicked={this.showFormHandler} btnType='Success'>Dodaj dzień</Button>}
-                            <Button btnType='Normal'>Dodaj notatke</Button>
+                            <Button clicked={this.showNoteHandler} btnType='Normal'>Notatka</Button>
                         </div>
                         {daysContainer}
                         <Modal cancel={this.cancelClosePeroidHandler} show={modalVisibility} >
                             <ConfirmAction
                                 content={`Czy na pewno chcesz zakończyć okres trwający od ${selectedPeroid.start}`}
-                                btnContent='Zakończ okres'
+                                btnContent='Zakończ'
                                 confirm={this.confirmClosePeroidHandler}
                                 cancel={this.cancelClosePeroidHandler}
                             />
@@ -266,6 +281,18 @@ class HallManagement extends Component {
                     </div>
                     : <Spinner />}
 
+                {showNote ? <FormikForm
+                    header={'notatke'}
+                    objectToEdit={{ note: '' }}
+                    inputs={[{
+                        label: '',
+                        type: 'textarea',
+                        name: 'note',
+                        value: '',
+                        placeholder: 'Uzupełnij notatke',
+                    }]}
+                    cancel={this.showNoteHandler}
+                    editObject={this.confirmEditNoteHandler} /> : null}
 
                 {showForm && selectedPeroid ? <FormikForm
                     header={`dzień ${indexOfDay + 1 ? indexOfDay + 1 : selectedPeroid.count + 1}`}

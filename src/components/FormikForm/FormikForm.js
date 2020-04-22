@@ -35,6 +35,9 @@ class FormikForm extends Component {
 
     createFileds = (props) =>
         this.props.inputs.map(input => {
+            if (input.type === 'textarea') {
+                return this.renderTextArea(input);
+            }
             let error = props.errors[input.name] && props.touched[input.name];
             return (
                 <div className={classes.FieldContainer} key={input.name}>
@@ -59,6 +62,28 @@ class FormikForm extends Component {
                 </div>
             )
         })
+
+    renderTextArea(input) {
+        return (
+            <div className={classes.FieldContainer} key={input.name}>
+                <div className={classes.Field}>
+                    <label htmlFor={input.name}>{input.label}</label>
+                    <Field name={input.name}>
+                        {props =>
+                            <textarea
+                                className={classes.TextArea}
+                                {...props.field}
+                                value={props.field.value}
+                                type='text'
+                                placeholder={input.placeholder}
+                                id={input.name}
+                            > </textarea>
+                        }</Field>
+
+                </div>
+            </div>
+        );
+    }
 
     getInitValues(inputs) {
         const initialValues = {};
